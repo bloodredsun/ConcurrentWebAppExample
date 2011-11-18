@@ -7,16 +7,15 @@ import java.io.IOException;
 
 public class RemoteClient {
 
-    HttpClient client;
+    HttpClient httpClient = new HttpClient();
 
-    public RemoteClient(HttpClient client) {
-        this.client = client;
+    public void setHttpClient(HttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     public void execute(final Tuple tuple) throws IOException {
 
         ContentExchange exchange = new ContentExchange() {
-            // define the callback method to process the response when you get it back
             protected void onResponseComplete() throws IOException {
                 super.onResponseComplete();
                 String responseContent = this.getResponseContent();
@@ -28,7 +27,7 @@ public class RemoteClient {
         exchange.setMethod("GET");
         exchange.setURL(tuple.getUrl());
         // start the exchange
-        client.send(exchange);
+        httpClient.send(exchange);
     }
 
 }

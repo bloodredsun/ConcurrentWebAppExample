@@ -20,10 +20,19 @@ public class ThreadedServlet extends HttpServlet {
 
     HttpClient httpClient = new HttpClient();
     ExecutorService executorService = Executors.newCachedThreadPool();
-    RemoteClient remoteClient = new RemoteClient(httpClient);
+    RemoteClient remoteClient = new RemoteClient();
 
+    public void init() throws ServletException{
+        httpClient.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
+        try {
+            httpClient.start();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+        remoteClient.setHttpClient(httpClient);
+    }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
             List<RemoteCallable> remoteCallables = new ArrayList<RemoteCallable>();
@@ -47,7 +56,7 @@ public class ThreadedServlet extends HttpServlet {
             writer.write("</html>");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new IOException("Whoops", e);
+            throw new IOException("Oops", e);
         }
 
 

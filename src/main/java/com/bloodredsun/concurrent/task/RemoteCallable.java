@@ -18,7 +18,7 @@ public class RemoteCallable implements Callable<String> {
 
     @Override
     public String call() throws IOException {
-        Tuple tuple = new Tuple();
+        Tuple tuple = new Tuple("http://localhost:8080/endpoint.jsp");
         remoteClient.execute(tuple);
         return tuple.getResponse();
     }

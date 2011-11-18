@@ -7,27 +7,14 @@ import java.util.concurrent.ExecutionException;
 public class Tuple {
 
     String url;
-    String request;
     SettableFuture<String> response = SettableFuture.create();
 
-
-    public Tuple() {
+    public Tuple(String url) {
+        this.url = url;
     }
 
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getRequest() {
-        return request;
-    }
-
-    public void setRequest(String request) {
-        this.request = request;
     }
 
     public String getResponse() {

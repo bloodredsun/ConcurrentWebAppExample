@@ -1,1 +1,1 @@
-<p>Obtained from endpoint</p>
+Pong

@@ -10,7 +10,7 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>threaded</servlet-name>
+        <servlet-name>threadedExample</servlet-name>
         <url-pattern>/threaded</url-pattern>
     </servlet-mapping>
 

@@ -1,6 +1,6 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head><title>A page</title></head>
-<body><p>You are here</p></body>
+<head><title>A test for concurrent frameworks</title></head>
+<body>
+Threads versus Actors, how do they work?
+</body>
 </html>

@@ -3,6 +3,7 @@ package com.bloodredsun.concurrent;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class Tuple {
 
@@ -27,6 +28,10 @@ public class Tuple {
             e.printStackTrace();
         }
         return value;
+    }
+
+    public Future<String> getFutureResponse(){
+        return response;
     }
 
     public void setResponse(String response) {

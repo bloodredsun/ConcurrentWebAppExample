@@ -7,12 +7,12 @@ import com.bloodredsun.concurrent.Tuple;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-public class RemoteCallable implements Callable<String> {
+public class MyRemoteCallable implements Callable<String> {
 
 
     RemoteClient remoteClient;
 
-    public RemoteCallable(RemoteClient remoteClient) {
+    public MyRemoteCallable(RemoteClient remoteClient) {
         this.remoteClient = remoteClient;
     }
 

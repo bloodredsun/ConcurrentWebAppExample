@@ -16,18 +16,21 @@
             <artifactId>logback-classic</artifactId>
             <version>0.9.18</version>
         </dependency>
-        <!--Jetty Asymc Client -->
+        <!--Jetty Async Client -->
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty-client</artifactId>
             <version>6.1.26</version>
         </dependency>
         <!--Akka-->
+
         <dependency>
             <groupId>se.scalablesolutions.akka</groupId>
             <artifactId>akka-actor</artifactId>
             <version>1.2</version>
         </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -44,25 +47,12 @@
 
     <repositories>
         <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-        <repository>
-            <id>Akka</id>
-            <name>Akka Maven2 Repository</name>
-            <url>http://akka.io/repository/</url>
+            <id>akka.repository</id>
+            <name>Akka Maven Repository</name>
+            <url>http://akka.io/repository</url>
         </repository>
     </repositories>
 
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <build>
         <pluginManagement>

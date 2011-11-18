@@ -8,6 +8,7 @@ import com.bloodredsun.concurrent.RemoteClient;
 import com.bloodredsun.concurrent.actor.MasterActor;
 import com.bloodredsun.concurrent.actor.Work;
 import com.bloodredsun.concurrent.actor.Works;
+import com.bloodredsun.util.MemoryStats;
 import org.mortbay.jetty.client.HttpClient;
 
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static akka.actor.Actors.actorOf;
 
@@ -34,6 +36,8 @@ public class ActorServlet extends HttpServlet {
     HttpClient httpClient = new HttpClient();
     RemoteClient remoteClient = new RemoteClient();
     ActorRef master;
+    Runtime runtime = Runtime.getRuntime();
+    AtomicInteger counter = new AtomicInteger(0);
 
     public void init() throws ServletException {
         httpClient.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
@@ -62,7 +66,12 @@ public class ActorServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            int counterValue = counter.incrementAndGet();
+            if(counterValue%20 == 0){
+                System.out.println(new MemoryStats(runtime).toString() + " at " + counterValue);
+            }
 
+            long t0 = System.currentTimeMillis();
             Works works = new Works();
 
             for (int ii = 0; ii < 10; ii++) {
@@ -81,6 +90,8 @@ public class ActorServlet extends HttpServlet {
             for (Future future : futures) {
                 writer.write("<p> Callable has returned value: '" + future.get() + "' </p>");
             }
+            long t1 = System.currentTimeMillis() - t0;
+            writer.write("<p>Took " + t1 + "ms");
             writer.write("</body>");
             writer.write("</html>");
         } catch (Exception e) {

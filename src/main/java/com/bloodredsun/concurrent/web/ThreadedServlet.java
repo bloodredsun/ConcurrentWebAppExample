@@ -2,6 +2,7 @@ package com.bloodredsun.concurrent.web;
 
 import com.bloodredsun.concurrent.RemoteClient;
 import com.bloodredsun.concurrent.task.MyRemoteCallable;
+import com.bloodredsun.util.MemoryStats;
 import org.mortbay.jetty.client.HttpClient;
 
 import javax.servlet.ServletException;
@@ -15,12 +16,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadedServlet extends HttpServlet {
 
     HttpClient httpClient = new HttpClient();
     ExecutorService executorService = Executors.newCachedThreadPool();
     RemoteClient remoteClient = new RemoteClient();
+    Runtime runtime = Runtime.getRuntime();
+    AtomicInteger counter = new AtomicInteger(0);
 
     public void init() throws ServletException {
         httpClient.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
@@ -43,6 +47,11 @@ public class ThreadedServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
+                        int counterValue = counter.incrementAndGet();
+            if(counterValue%20 == 0){
+                System.out.println(new MemoryStats(runtime).toString() + " at " + counterValue);
+            }
+            long t0 = System.currentTimeMillis();
             List<MyRemoteCallable> myRemoteCallables = new ArrayList<MyRemoteCallable>();
 
             for (int ii = 0; ii < 10; ii++) {
@@ -59,7 +68,8 @@ public class ThreadedServlet extends HttpServlet {
             for (Future future : futures) {
                 writer.write("<p> Callable has returned value: '" + future.get() + "' </p>");
             }
-
+                        long t1 = System.currentTimeMillis() - t0;
+            writer.write("<p>Took " + t1 + "ms");
             writer.write("</body>");
             writer.write("</html>");
         } catch (Exception e) {

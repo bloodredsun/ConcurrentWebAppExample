@@ -46,7 +46,6 @@ public class MasterActor extends UntypedActor {
                         }
                     })
                     .start();
-
         }
 
         // wrap them with a load-balancing router

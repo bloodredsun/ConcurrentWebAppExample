@@ -22,7 +22,7 @@ public class ThreadedServlet extends HttpServlet {
     ExecutorService executorService = Executors.newCachedThreadPool();
     RemoteClient remoteClient = new RemoteClient();
 
-    public void init() throws ServletException{
+    public void init() throws ServletException {
         httpClient.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
         try {
             httpClient.start();
@@ -30,6 +30,14 @@ public class ThreadedServlet extends HttpServlet {
             throw new ServletException(e);
         }
         remoteClient.setHttpClient(httpClient);
+    }
+
+    public void destroy() {
+        try {
+            httpClient.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

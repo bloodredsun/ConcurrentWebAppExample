@@ -6,6 +6,7 @@ import akka.actor.UntypedActorFactory;
 import akka.routing.CyclicIterator;
 import akka.routing.InfiniteIterator;
 import akka.routing.UntypedLoadBalancer;
+import com.bloodredsun.concurrent.RemoteClient;
 
 import static akka.actor.Actors.actorOf;
 import static java.util.Arrays.asList;
@@ -33,12 +34,19 @@ public class MasterActor extends UntypedActor {
         }
     }
 
-    public MasterActor(int nrOfWorkers) {
-
+    public MasterActor(int nrOfWorkers, final RemoteClient remoteClient) {
         // create the workers
         final ActorRef[] workers = new ActorRef[nrOfWorkers];
         for (int i = 0; i < nrOfWorkers; i++) {
-            workers[i] = actorOf(WorkerActor.class).start();
+
+            workers[i] = actorOf(
+                    new UntypedActorFactory() {
+                        public UntypedActor create() {
+                            return new WorkerActor(remoteClient);
+                        }
+                    })
+                    .start();
+
         }
 
         // wrap them with a load-balancing router

@@ -1,1 +1,1 @@
-Pong
+pong <%= request.getParameter("pong")%>>

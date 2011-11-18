@@ -1,5 +1,6 @@
 package com.bloodredsun.concurrent;
 
+import com.bloodredsun.concurrent.actor.Work;
 import org.mortbay.jetty.client.ContentExchange;
 import org.mortbay.jetty.client.HttpClient;
 
@@ -26,6 +27,24 @@ public class RemoteClient {
         //set the method and the url
         exchange.setMethod("GET");
         exchange.setURL(tuple.getUrl());
+        // start the exchange
+        httpClient.send(exchange);
+    }
+
+
+    public void execute(final Work work) throws IOException {
+
+        ContentExchange exchange = new ContentExchange() {
+            protected void onResponseComplete() throws IOException {
+                super.onResponseComplete();
+                String responseContent = this.getResponseContent();
+                work.setFutureResponse(responseContent);
+
+            }
+        };
+        //set the method and the url
+        exchange.setMethod("GET");
+        exchange.setURL(work.getUrl());
         // start the exchange
         httpClient.send(exchange);
     }

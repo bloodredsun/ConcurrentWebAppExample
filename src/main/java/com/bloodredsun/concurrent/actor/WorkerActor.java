@@ -27,11 +27,8 @@ public class WorkerActor extends UntypedActor {
     public void onReceive(Object message) throws Exception {
         if (message instanceof Work) {
             Work work = (Work) message;
-            SettableFuture<String> response = SettableFuture.<String>create();
-            response.set("local futureResponse");
-
-            work.setFutureResponse("local futureResponse");
-
+            //work.setFutureResponse("local futureResponse");
+            remoteClient.execute(work);
         }
     }
 

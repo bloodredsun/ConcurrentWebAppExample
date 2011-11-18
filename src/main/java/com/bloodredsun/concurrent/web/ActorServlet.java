@@ -46,13 +46,18 @@ public class ActorServlet extends HttpServlet {
 
         master = actorOf(new UntypedActorFactory() {
             public UntypedActor create() {
-                return new MasterActor(4);
+                return new MasterActor(4, remoteClient);
             }
         }).start();
     }
 
     public void destroy(){
        Actors.registry().shutdownAll();
+        try {
+            httpClient.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -61,7 +66,7 @@ public class ActorServlet extends HttpServlet {
             Works works = new Works();
 
             for (int ii = 0; ii < 10; ii++) {
-                works.add(new Work());
+                works.add(new Work("http://localhost:8080/endpoint.jsp?pong=actors%20rule"));
 
             }
             master.tell(works);

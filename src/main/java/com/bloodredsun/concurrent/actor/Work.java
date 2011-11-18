@@ -13,8 +13,12 @@ import java.util.concurrent.Future;
  */
 public class Work {
 
-
+    String url;
     SettableFuture<String> futureResponse = SettableFuture.create();
+
+    public Work(String url) {
+        this.url = url;
+    }
 
     public Future<String> getFutureResponse() {
         return futureResponse;
@@ -22,5 +26,9 @@ public class Work {
 
     public void setFutureResponse(String futureResponse) {
         this.futureResponse.set(futureResponse);
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

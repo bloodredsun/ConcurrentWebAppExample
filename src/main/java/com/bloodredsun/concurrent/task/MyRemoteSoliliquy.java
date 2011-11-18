@@ -23,7 +23,6 @@ public class MyRemoteSoliliquy {
         this.remoteClient = remoteClient;
     }
 
-    @Override
     public Future<String> call(Future<String> response) throws IOException {
         Tuple tuple = new Tuple("http://localhost:8080/endpoint.jsp");
         remoteClient.execute(tuple);

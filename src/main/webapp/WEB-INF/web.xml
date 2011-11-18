@@ -5,13 +5,23 @@
          version="2.5">
 
     <servlet>
-        <servlet-name>threaded</servlet-name>
+        <servlet-name>threadedExample</servlet-name>
         <servlet-class>com.bloodredsun.concurrent.web.ThreadedServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>threadedExample</servlet-name>
-        <url-pattern>/threaded</url-pattern>
+        <url-pattern>/threadedExample</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>actorExample</servlet-name>
+        <servlet-class>com.bloodredsun.concurrent.web.ActorServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>actorExample</servlet-name>
+        <url-pattern>/actorExample</url-pattern>
     </servlet-mapping>
 
     <session-config>

@@ -1,6 +1,8 @@
 package com.bloodredsun.concurrent.actor;
 
 import akka.actor.UntypedActor;
+import com.bloodredsun.concurrent.RemoteClient;
+import com.google.common.util.concurrent.SettableFuture;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,12 +13,26 @@ import akka.actor.UntypedActor;
  */
 public class WorkerActor extends UntypedActor {
 
-    @Override
-    public void onReceive(Object o) throws Exception {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+
+    RemoteClient remoteClient;
 
     public WorkerActor() {
+    }
+
+    public WorkerActor(RemoteClient remoteClient) {
+        this.remoteClient = remoteClient;
+    }
+
+    @Override
+    public void onReceive(Object message) throws Exception {
+        if (message instanceof Work) {
+            Work work = (Work) message;
+            SettableFuture<String> response = SettableFuture.<String>create();
+            response.set("local futureResponse");
+
+            work.setFutureResponse("local futureResponse");
+
+        }
     }
 
 

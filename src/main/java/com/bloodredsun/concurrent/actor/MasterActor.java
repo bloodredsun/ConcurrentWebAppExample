@@ -17,45 +17,49 @@ import static java.util.Arrays.asList;
  *         Date: 18/11/2011
  *         Time: 11:01
  */
-class MasterActor extends UntypedActor {
+public class MasterActor extends UntypedActor {
 
+    private ActorRef router;
 
-  private long start;
+    static class LoadBalancer extends UntypedLoadBalancer {
+        private final InfiniteIterator<ActorRef> workers;
 
-  private ActorRef router;
+        public LoadBalancer(ActorRef[] workers) {
+            this.workers = new CyclicIterator<ActorRef>(asList(workers));
+        }
 
-  static class LoadBalancer extends UntypedLoadBalancer {
-    private final InfiniteIterator<ActorRef> workers;
-
-    public LoadBalancer(ActorRef[] workers) {
-      this.workers = new CyclicIterator<ActorRef>(asList(workers));
+        public InfiniteIterator<ActorRef> seq() {
+            return workers;
+        }
     }
 
-    public InfiniteIterator<ActorRef> seq() {
-      return workers;
+    public MasterActor(int nrOfWorkers) {
+
+        // create the workers
+        final ActorRef[] workers = new ActorRef[nrOfWorkers];
+        for (int i = 0; i < nrOfWorkers; i++) {
+            workers[i] = actorOf(WorkerActor.class).start();
+        }
+
+        // wrap them with a load-balancing router
+        router = actorOf(new UntypedActorFactory() {
+            public UntypedActor create() {
+                return new LoadBalancer(workers);
+            }
+        }).start();
     }
-  }
 
-  public MasterActor(int nrOfWorkers){
+    // message handler
+    public void onReceive(Object message) {
 
-    // create the workers
-    final ActorRef[] workers = new ActorRef[nrOfWorkers];
-    for (int i = 0; i < nrOfWorkers; i++) {
-      workers[i] = actorOf(WorkerActor.class).start();
+        if (message instanceof Works) {
+            for (Work work : ((Works) message).getAll()) {
+                router.tell(work);
+            }
+        }
+
     }
 
-    // wrap them with a load-balancing router
-    router = actorOf(new UntypedActorFactory() {
-      public UntypedActor create() {
-        return new LoadBalancer(workers);
-      }
-    }).start();
-  }
-
-  // message handler
-  public void onReceive(Object message) {
-
-  }
 }
 
 

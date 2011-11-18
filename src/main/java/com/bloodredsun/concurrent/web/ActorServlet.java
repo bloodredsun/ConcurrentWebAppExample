@@ -1,8 +1,13 @@
 package com.bloodredsun.concurrent.web;
 
+import akka.actor.ActorRef;
+import akka.actor.Actors;
+import akka.actor.UntypedActor;
+import akka.actor.UntypedActorFactory;
 import com.bloodredsun.concurrent.RemoteClient;
 import com.bloodredsun.concurrent.actor.MasterActor;
-import com.bloodredsun.concurrent.task.MyRemoteCallable;
+import com.bloodredsun.concurrent.actor.Work;
+import com.bloodredsun.concurrent.actor.Works;
 import org.mortbay.jetty.client.HttpClient;
 
 import javax.servlet.ServletException;
@@ -11,9 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
+
+import static akka.actor.Actors.actorOf;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,9 +33,9 @@ public class ActorServlet extends HttpServlet {
 
     HttpClient httpClient = new HttpClient();
     RemoteClient remoteClient = new RemoteClient();
-    MasterActor master
+    ActorRef master;
 
-    public void init() throws ServletException{
+    public void init() throws ServletException {
         httpClient.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
         try {
             httpClient.start();
@@ -37,27 +43,39 @@ public class ActorServlet extends HttpServlet {
             throw new ServletException(e);
         }
         remoteClient.setHttpClient(httpClient);
+
+        master = actorOf(new UntypedActorFactory() {
+            public UntypedActor create() {
+                return new MasterActor(4);
+            }
+        }).start();
+    }
+
+    public void destroy(){
+       Actors.registry().shutdownAll();
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-              try {
-            List<MyRemoteCallable> myRemoteCallables = new ArrayList<MyRemoteCallable>();
+        try {
+
+            Works works = new Works();
 
             for (int ii = 0; ii < 10; ii++) {
-                myRemoteCallables.add(new MyRemoteCallable(remoteClient));
-            }
+                works.add(new Work());
 
-            List<Future<String>> futures = master.invokeAll(myRemoteCallables);
+            }
+            master.tell(works);
+
+            List<Future<String>> futures = works.getFutures();
 
 
             PrintWriter writer = response.getWriter();
             writer.write("<html>");
             writer.write("<body>");
-            writer.write("<p> In ThreadedServlet Servlet with Callables </p>");
+            writer.write("<p> In ActorServlet Servlet with Callables </p>");
             for (Future future : futures) {
                 writer.write("<p> Callable has returned value: '" + future.get() + "' </p>");
             }
-
             writer.write("</body>");
             writer.write("</html>");
         } catch (Exception e) {

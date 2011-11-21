@@ -1,12 +1,10 @@
-package com.bloodredsun.concurrent.actor;
+package com.bloodredsun.concurrent.task;
 
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.util.concurrent.Future;
 
 /**
- * Created by IntelliJ IDEA.
- *
  * @author Martin Anderson
  *         Date: 18/11/2011
  *         Time: 13:19

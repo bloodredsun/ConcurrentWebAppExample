@@ -47,8 +47,8 @@ public class ThreadedServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-                        int counterValue = counter.incrementAndGet();
-            if(counterValue%20 == 0){
+            int counterValue = counter.incrementAndGet();
+            if (counterValue % 20 == 0) {
                 System.out.println(new MemoryStats(runtime).toString() + " at " + counterValue);
             }
             long t0 = System.currentTimeMillis();
@@ -68,7 +68,7 @@ public class ThreadedServlet extends HttpServlet {
             for (Future future : futures) {
                 writer.write("<p> Callable has returned value: '" + future.get() + "' </p>");
             }
-                        long t1 = System.currentTimeMillis() - t0;
+            long t1 = System.currentTimeMillis() - t0;
             writer.write("<p>Took " + t1 + "ms");
             writer.write("</body>");
             writer.write("</html>");

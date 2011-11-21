@@ -6,6 +6,7 @@ import com.bloodredsun.concurrent.Tuple;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 public class MyRemoteCallable implements Callable<String> {
 
@@ -17,9 +18,9 @@ public class MyRemoteCallable implements Callable<String> {
     }
 
     @Override
-    public String call() throws IOException {
-        Tuple tuple = new Tuple("http://localhost:8080/endpoint.jsp?pong=threaded");
-        remoteClient.execute(tuple);
-        return tuple.getResponse();
+    public String call() throws IOException, ExecutionException, InterruptedException {
+        Work work = new Work("http://localhost:8080/endpoint.jsp?pong=threaded");
+        remoteClient.execute(work);
+        return work.getFutureResponse().get();
     }
 }

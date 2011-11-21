@@ -2,17 +2,14 @@ package com.bloodredsun.concurrent.actor;
 
 import akka.actor.UntypedActor;
 import com.bloodredsun.concurrent.RemoteClient;
-import com.google.common.util.concurrent.SettableFuture;
+import com.bloodredsun.concurrent.task.Work;
 
 /**
- * Created by IntelliJ IDEA.
- *
  * @author Martin Anderson
  *         Date: 18/11/2011
  *         Time: 11:39
  */
 public class WorkerActor extends UntypedActor {
-
 
     RemoteClient remoteClient;
 

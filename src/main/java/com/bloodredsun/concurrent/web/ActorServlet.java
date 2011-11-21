@@ -6,8 +6,8 @@ import akka.actor.UntypedActor;
 import akka.actor.UntypedActorFactory;
 import com.bloodredsun.concurrent.RemoteClient;
 import com.bloodredsun.concurrent.actor.MasterActor;
-import com.bloodredsun.concurrent.actor.Work;
-import com.bloodredsun.concurrent.actor.Works;
+import com.bloodredsun.concurrent.task.Work;
+import com.bloodredsun.concurrent.task.Works;
 import com.bloodredsun.util.MemoryStats;
 import org.mortbay.jetty.client.HttpClient;
 
@@ -24,8 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static akka.actor.Actors.actorOf;
 
 /**
- * Created by IntelliJ IDEA.
- *
  * @author Martin Anderson
  *         Date: 18/11/2011
  *         Time: 10:50

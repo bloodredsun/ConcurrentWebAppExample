@@ -1,6 +1,6 @@
 package com.bloodredsun.concurrent;
 
-import com.bloodredsun.concurrent.actor.Work;
+import com.bloodredsun.concurrent.task.Work;
 import org.mortbay.jetty.client.ContentExchange;
 import org.mortbay.jetty.client.HttpClient;
 

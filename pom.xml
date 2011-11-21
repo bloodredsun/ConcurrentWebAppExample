@@ -10,7 +10,7 @@
 
 
     <dependencies>
-
+        <!-- Logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -23,31 +23,23 @@
             <version>6.1.26</version>
         </dependency>
         <!--Akka-->
-
         <dependency>
             <groupId>se.scalablesolutions.akka</groupId>
             <artifactId>akka-actor</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
-            <groupId>se.scalablesolutions.akka</groupId>
-            <artifactId></artifactId>
-            <version>1.2</version>
-        </dependency>
-
-
+        <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.1</version>
         </dependency>
+        <!-- Google stuff -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>10.0</version>
         </dependency>
-
-
     </dependencies>
 
     <repositories>

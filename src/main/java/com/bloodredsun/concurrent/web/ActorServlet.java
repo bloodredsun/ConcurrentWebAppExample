@@ -34,8 +34,6 @@ public class ActorServlet extends HttpServlet {
     HttpClient httpClient = new HttpClient();
     RemoteClient remoteClient = new RemoteClient();
     ActorRef master;
-    Runtime runtime = Runtime.getRuntime();
-    AtomicInteger counter = new AtomicInteger(0);
 
     public void init() throws ServletException {
         httpClient.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
@@ -64,17 +62,12 @@ public class ActorServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int counterValue = counter.incrementAndGet();
-            if(counterValue%20 == 0){
-                System.out.println(new MemoryStats(runtime).toString() + " at " + counterValue);
-            }
 
             long t0 = System.currentTimeMillis();
-            Works works = new Works();
 
+            Works works = new Works();
             for (int ii = 0; ii < 10; ii++) {
                 works.add(new Work("http://localhost:8080/endpoint.jsp?pong=actors%20rule"));
-
             }
             master.tell(works);
 
@@ -83,15 +76,19 @@ public class ActorServlet extends HttpServlet {
 
             PrintWriter writer = response.getWriter();
             writer.write("<html>");
+
             writer.write("<body>");
-            writer.write("<p> In ActorServlet Servlet with Callables </p>");
+            writer.write("<p> In ActorServlet Servlet</p>");
+
             for (Future future : futures) {
-                writer.write("<p> Callable has returned value: '" + future.get() + "' </p>");
+                writer.write("<p> Work Future has returned value: '" + future.get() + "' </p>");
             }
+
             long t1 = System.currentTimeMillis() - t0;
             writer.write("<p>Took " + t1 + "ms");
             writer.write("</body>");
             writer.write("</html>");
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new IOException("Oops", e);

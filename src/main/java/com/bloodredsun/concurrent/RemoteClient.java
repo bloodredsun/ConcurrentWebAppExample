@@ -21,7 +21,6 @@ public class RemoteClient {
                 super.onResponseComplete();
                 String responseContent = this.getResponseContent();
                 tuple.setResponse(responseContent);
-
             }
         };
         //set the method and the url
